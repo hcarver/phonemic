@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SappyJNI", "SappyJNI\SappyJNI.vcproj", "{992B45B6-5714-46B6-9A5E-D3C11BBAD10B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Debug|x64 = Debug|x64
+		Release|Win32 = Release|Win32
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{992B45B6-5714-46B6-9A5E-D3C11BBAD10B}.Debug|Win32.ActiveCfg = Release|Win32
+		{992B45B6-5714-46B6-9A5E-D3C11BBAD10B}.Debug|Win32.Build.0 = Release|Win32
+		{992B45B6-5714-46B6-9A5E-D3C11BBAD10B}.Debug|x64.ActiveCfg = Debug|x64
+		{992B45B6-5714-46B6-9A5E-D3C11BBAD10B}.Debug|x64.Build.0 = Debug|x64
+		{992B45B6-5714-46B6-9A5E-D3C11BBAD10B}.Release|Win32.ActiveCfg = Release|Win32
+		{992B45B6-5714-46B6-9A5E-D3C11BBAD10B}.Release|Win32.Build.0 = Release|Win32
+		{992B45B6-5714-46B6-9A5E-D3C11BBAD10B}.Release|x64.ActiveCfg = Release|x64
+		{992B45B6-5714-46B6-9A5E-D3C11BBAD10B}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
