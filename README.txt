@@ -32,7 +32,7 @@ Phonemic currently supports the following platforms and speech engines:
 	* speech-dispatcher (available by default on Vinux and Ubuntu), the same speech interface used by ORCA.
 
 == Usage ==
-The Phonemic library is a .jar file that must be included in your java project. The phonemic.jar file can be found under phonemic/dist. In addition to the phonemic.jar file, your program must include the appropriate JNI libraries for the various platforms you intend to support. These files can be found under phonemic/jni. For more information on how to use Phonemic, see the wiki page:
+The Phonemic library is a .jar file that must be included in your java project. In addition to the phonemic.jar file, your program must include the appropriate JNI libraries for the various platforms you intend to support. These files can be found under the jni directory. For more information on how to use Phonemic, see the wiki page:
 	https://sourceforge.net/apps/trac/phonemic/wiki/UsingPhonemic
 
 The libraries are as follows. Note that if you do not intend to support a particular platform, you do not have to include its libraries in your distribution.
@@ -47,7 +47,7 @@ The libraries are as follows. Note that if you do not intend to support a partic
  * Linux
 	* libLinuxSpeakJNI.so (speech-dispatcher support)
 
-A simple demo application is included as a Netbeans project under testApp/.
+A simple demo application is included as a Netbeans project under the example directory.
 
 == Build Notes ==
 Although libraries come with Phonemic pre-built, should you want to modify any of them, it is necessary to use the following systems.
@@ -58,5 +58,3 @@ Although libraries come with Phonemic pre-built, should you want to modify any o
 	* To modify the Carbon speech library, libCarbonSpeakJNI.jnilib, you must use XCode 3. (3.2.1 preferred) XCode 4 has not been tested.
  * Linux
 	* The Linux library (libLinuxSpeakJNI.so) can be loaded as a standard Netbeans project.
-
-The source code for all libraries is included under libraries/. Pre-built libraries can be found under phonemic/jni.
