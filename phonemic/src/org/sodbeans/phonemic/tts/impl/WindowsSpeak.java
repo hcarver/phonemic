@@ -17,9 +17,16 @@ import org.sodbeans.phonemic.tts.AbstractTextToSpeech;
  * @author Andreas Stefik
  */
 public class WindowsSpeak extends AbstractTextToSpeech{
+    // MS_SAPI_SYNTH_DELAY is the number of milliseconds it *might* take to
+    // generate speech output. This is necessary because SAPI does not
+    // report it is speaking when speech is being generated. As a result,
+    // priorities are broken without this slight delay. 
+    // TODO: Find a way to make this work better--this is a horror.
+    private final int MS_SAPI_SYNTH_DELAY = 25;
     private TextToSpeech sapi = new TextToSpeech();
     private ArrayList<SpeechVoice> voices;
     private String pitchString = "<pitch absmiddle=\"0\">";
+    private long lastRequestTime = 0;
     
     public WindowsSpeak() {
         sapi.createTTSNative();
@@ -85,6 +92,7 @@ public class WindowsSpeak extends AbstractTextToSpeech{
             if (getTextToSpeechEngine() == TextToSpeechEngine.MICROSOFT_SAPI)
             {
                 sapi.speakNative(customPitchStr + text + "</pitch>");
+                lastRequestTime = System.currentTimeMillis();
             }
             else
             {
@@ -116,6 +124,12 @@ public class WindowsSpeak extends AbstractTextToSpeech{
     
     @Override
     public boolean isSpeaking() {
+        if (getTextToSpeechEngine() == TextToSpeechEngine.MICROSOFT_SAPI)
+        {
+            long timeDifference = System.currentTimeMillis() - lastRequestTime;
+            return (timeDifference < MS_SAPI_SYNTH_DELAY || sapi.isSpeaking());
+        }
+        
         return sapi.isSpeaking();
     }
 
