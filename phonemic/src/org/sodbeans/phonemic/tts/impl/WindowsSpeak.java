@@ -21,8 +21,7 @@ public class WindowsSpeak extends AbstractTextToSpeech{
     // generate speech output. This is necessary because SAPI does not
     // report it is speaking when speech is being generated. As a result,
     // priorities are broken without this slight delay. 
-    // TODO: Find a way to make this work better--this is a horror.
-    private final int MS_SAPI_SYNTH_DELAY = 25;
+    private final int MS_SAPI_SYNTH_DELAY = 150;
     private TextToSpeech sapi = new TextToSpeech();
     private ArrayList<SpeechVoice> voices;
     private String pitchString = "<pitch absmiddle=\"0\">";
