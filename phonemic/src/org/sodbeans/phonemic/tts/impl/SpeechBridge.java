@@ -10,6 +10,8 @@ import java.util.concurrent.PriorityBlockingQueue;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
+import java.util.ArrayList;
+import org.sodbeans.phonemic.OperatingSystem;
 import org.sodbeans.phonemic.RequestType;
 import org.sodbeans.phonemic.SpeechRequest;
 import org.sodbeans.phonemic.SpeechPriority;
@@ -417,5 +419,26 @@ public class SpeechBridge implements TextToSpeech{
         this.speech.setPitch(0.5);
         
         consumer.start();
+    }
+
+    @Override
+    public Iterator<TextToSpeechEngine> getAvailableEngines() {
+        ArrayList<TextToSpeechEngine> engines = new ArrayList<TextToSpeechEngine>();
+        
+        if (OperatingSystem.getOS() == OperatingSystem.MAC_OSX) {
+            engines.add(TextToSpeechEngine.APPLE_CARBON);
+            engines.add(TextToSpeechEngine.APPLE_SAY);
+        }
+        else if (OperatingSystem.getOS() == OperatingSystem.LINUX) {
+            engines.add(TextToSpeechEngine.SPEECH_DISPATCHER);
+        }
+        else {
+            // Windows.
+            engines.add(TextToSpeechEngine.MICROSOFT_SAPI);
+            engines.add(TextToSpeechEngine.JAWS);
+            engines.add(TextToSpeechEngine.NVDA);
+        }
+        
+        return engines.iterator();
     }
 }

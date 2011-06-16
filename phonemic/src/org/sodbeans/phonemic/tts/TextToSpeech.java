@@ -16,8 +16,6 @@ import org.sodbeans.phonemic.*;
  * @author Andreas Stefik and Jeff Wilson
  */
 public interface TextToSpeech {
-
-
     /**
      * Determines of the engine can speak blocking calls.
      *
@@ -76,24 +74,24 @@ public interface TextToSpeech {
      */
     public boolean canSetPitch();
     
-    /*
+    /**
      * Get all available voices for use by the text to speech engine.
      *
-     * @return Iterator<SpeechVoice> object
+     * @return available voices
      */
     public Iterator<SpeechVoice> getAvailableVoices();
 
-    /*
+    /**
      * Get the current voice in use by the text to speech engine.
      *
-     * @return SpeechVoice object
+     * @return the current voice
      */
     public SpeechVoice getCurrentVoice();
 
-    /*
+    /**
      * Gets the current speed. (0.0 - 1.0)
      *
-     * @return double
+     * @return the speed
      */
     public double getSpeed();
 
@@ -101,146 +99,150 @@ public interface TextToSpeech {
      * Returns an enumerated type representing the current text to speech engine
      * that is loaded on the system.
      * 
-     * @return
+     * @return the current text to speech engine
      */
     public TextToSpeechEngine getTextToSpeechEngine();
-
-    /*
+    
+    /**
+     * Returns the available engines on the system.
+     * 
+     * @return 
+     */
+    public Iterator<TextToSpeechEngine> getAvailableEngines();
+    /**
      * Gets the current volume. (0.0 - 1.0)
      *
-     * @return double
+     * @return the volume
      */
     public double getVolume();
 
-    /*
+    /**
      * Gets the current pitch. (0.0 - 1.0)
      *
-     * @return double
+     * @return the pitch
      */
     public double getPitch();
     
-    /*
+    /**
      * Determines whether or not the engine is currently speaking.
      * Not supported by all engines. If not supported, false is always
      * returned.
      *
-     * @return boolean indicates success or failure.
+     * @return whether or not the engine is speaking
      */
     public boolean isSpeaking();
 
-    /*
+    /**
      * Pauses current speech (if any).
      *
-     * @return boolean indicates success or failure.
+     * @return indicates success or failure.
      */
     public boolean pause();
     
-    /*
+    /**
      * Reinitializes the text to speech engine.
      */
     public void reinitialize();
 
-    /*
+    /**
      * Respeaks the most recently uttered text.
      *
-     * @return boolean indicates success or failure.
+     * @return indicates success or failure.
      */
     public boolean respeak();
     
     /**
      * Copies the most recently uttered text to the clipboard.
-     * @return 
+     * 
+     * @return indicates success or failure
      */
     public boolean copyToClipboard();
     
-    /*
+    /**
      * Resumes current speech, if any is currently paused.
      *
-     * @return boolean indicates success or failure.
+     * @return indicates success or failure.
      */
     public boolean resume();
 
-    /*
+    /**
      * Sets the current volume. (0.0 - 1.0)
      *
-     *
-     * @param vol: the new volume
-     * @return boolean indicates success or failure.
+     * @param vol the new volume
+     * @return indicates success or failure.
      */
     public boolean setVolume(double vol);
 
-    /*
+    /**
      * Sets the current speed. (0.0 - 1.0)
      *
-     *
-     * @param speed: the new speed
-     * @return boolean indicates success or failure.
+     * @param speed the new speed
+     * @return indicates success or failure.
      */
     public boolean setSpeed(double speed);
 
-    /*
+    /**
      * Sets the current pitch. (0.0 - 1.0)
      *
-     * @param speed: the new speed
-     * @return boolean indicates success or failure.
+     * @param speed the new speed
+     * @return indicates success or failure.
      */
     public boolean setPitch(double pitch);
 
-    /*
+    /**
      * Set the current voice.
      *
-     * @param voice: the new voice
-     * @return boolean indicates success or failure.
+     * @param voice the new voice
+     * @return indicates success or failure.
      */
     public boolean setVoice(SpeechVoice voice);
 
-    /*
+    /**
      * Speaks the given string.
      *
-     * @param text: The string to speak.
-     * @return boolean indicates success or failure.
+     * @param text The string to speak.
+     * @return indicates success or failure.
      */
     public boolean speak(String text);
     
-    /*
+    /**
      * Speaks the given string with the given priority.
      *
-     * @param text: The string to speak.
-     * @param priority: Priority to assign to given text.
-     * @return boolean indicates success or failure.
+     * @param text The string to speak.
+     * @param priority Priority to assign to given text.
+     * @return indicates success or failure.
      */
     public boolean speak(String text, SpeechPriority priority);
 
-    /*
+    /**
      * Speaks the given string with the given priority.
      *
-     * @param text: The string to speak.
-     * @param priority: Priority to assign to given text.
-     * @param type
-     * @return boolean indicates success or failure.
+     * @param text The string to speak.
+     * @param priority Priority to assign to given text.
+     * @param type A TEXT or CHARACTER request
+     * @return indicates success or failure.
      */
     public boolean speak(String text, SpeechPriority priority, RequestType type);
 
-    /*
+    /**
      * Speaks the given character. Characters are
      * spoken differently by various engines. On OS X, for example, characters
      * are spoken with a higher pitch if they are capitalized letters.
      *
-     *
-     * @param c: The character to speak.
-     * @return boolean indicates success or failure.
+     * @param c The character to speak.
+     * @return indicates success or failure.
      */
     public boolean speak(char c);
     
-    /*
+    /**
      * Speaks the given character with the given priority. Characters are
      * spoken differently by various engines. On OS X, for example, characters
      * are spoken with a higher pitch if they are capitalized letters.
      *
      *
-     * @param c: The character to speak.
-     * @param priority: Priority to assign to given text.
-     * @return boolean indicates success or failure.
+     * @param c The character to speak.
+     * @param priority Priority to assign to given text.
+     * @return indicates success or failure.
      */
     public boolean speak(char c, SpeechPriority priority);
 
@@ -252,57 +254,60 @@ public interface TextToSpeech {
      */
     public boolean speak(SpeechProcessor proc);
     
-    /*
+    /**
      * Speaks the given string and blocks until speaking is complete.
      *
-     * @param text: The string to speak.
-     * @return boolean indicates success or failure.
+     * @param text The string to speak.
+     * @return indicates success or failure.
      */
     public boolean speakBlocking(String text);
 
-    /*
+    /**
      * Speaks the given string with given priority and blocks until speaking
      * is complete.
      *
-     * @param text: The string to speak.
-     * @param priority: Priority to assign to given text.
-     * @return boolean indicates success or failure.
+     * @param text The string to speak.
+     * @param priority Priority to assign to given text.
+     * @return indicates success or failure.
      */
     public boolean speakBlocking(String text, SpeechPriority priority);
 
-    /*
+    /**
      * Speaks the given string with given priority and blocks until speaking
      * is complete.
      *
-     * @param text: The string to speak.
-     * @param priority: Priority to assign to given text.
-     * @param type
-     * @return boolean indicates success or failure.
+     * @param text The string to speak.
+     * @param priority Priority to assign to given text.
+     * @param type A TEXT or CHARACTER request
+     * @return indicates success or failure.
      */
     public boolean speakBlocking(String text, SpeechPriority priority, RequestType type);
-    /*
+    
+    /**
      * Speaks the given character. Works exactly like speak(char), but blocks
      * until speaking is finished.
      *
-     * @param c: The character to speak.
-     * @return boolean indicates success or failure.
+     * @param c The character to speak.
+     * @return indicates success or failure.
      */
     public boolean speakBlocking(char c);
 
-    /*
+    /**
      * Speaks the given character. Works exactly like speak(char), but blocks
      * until speaking is finished.
      *
-     * @param c: The character to speak.
-     * @param priority: Priority to assign to given text.
-     * @return boolean indicates success or failure.
+     * @param c The character to speak.
+     * @param priority Priority to assign to given text.
+     * @return indicates success or failure.
      */
     public boolean speakBlocking(char c, SpeechPriority priority);
 
-    /*
+    /**
      * Stops current speech (if any).
      *
-     * @return boolean indicates success or failure.
+     * @return indicates success or failure.
      */
     public boolean stop();
+    
+    
 }

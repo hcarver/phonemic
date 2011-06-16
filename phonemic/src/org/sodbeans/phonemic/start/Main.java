@@ -5,6 +5,7 @@
 
 package org.sodbeans.phonemic.start;
 
+import java.util.Iterator;
 import org.sodbeans.phonemic.*;
 import org.sodbeans.phonemic.tts.*;
 

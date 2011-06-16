@@ -5,6 +5,8 @@
 
 package org.sodbeans.phonemic.tts;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import org.sodbeans.phonemic.*;
 
 /**
@@ -130,5 +132,11 @@ public abstract class AbstractTextToSpeech implements TextToSpeech {
     @Override
     public boolean speakBlocking(char c) {
         return speakBlocking(c, SpeechPriority.MEDIUM);
+    }
+    
+    @Override
+    public Iterator<TextToSpeechEngine> getAvailableEngines() {
+        // Implemented in speech bridge--this should never be called.
+        return null;
     }
 }
