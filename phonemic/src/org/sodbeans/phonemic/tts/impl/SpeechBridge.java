@@ -127,7 +127,8 @@ public class SpeechBridge implements TextToSpeech{
     private TextToSpeech speech = null;
     private ConsumerThread consumer = new ConsumerThread(speechQueue);
     private boolean speechEnabled = true;
-
+    private boolean reinitializing = false;
+    
     @Override
     public boolean canBlock() {
         return speech.canBlock();
@@ -237,14 +238,16 @@ public class SpeechBridge implements TextToSpeech{
     }
 
     @Override
-    public void reinitialize() {
+    public synchronized void reinitialize() {
         // Stop any current speech and disable speech, until reinitialize is
         // complete.
         consumer.stop();
         speechEnabled = false;
+        reinitializing = true;
         speech.stop();
         speech.reinitialize();
         speechEnabled = true;
+        reinitializing = false;
         consumer.start();
     }
 
@@ -276,28 +279,28 @@ public class SpeechBridge implements TextToSpeech{
 
     @Override
     public boolean setVolume(double vol) {
-        if (consumer.isRunning())
+        if (!reinitializing)
             return speech.setVolume(vol);
         return false;
     }
 
     @Override
     public boolean setSpeed(double speed) {
-        if (consumer.isRunning())
+        if (!reinitializing)
             return speech.setSpeed(speed);
         return false;
     }
 
     @Override
     public boolean setPitch(double pitch) {
-        if (consumer.isRunning())
+        if (!reinitializing)
             return speech.setPitch(pitch);
         return false;
     }
 
     @Override
     public boolean setVoice(SpeechVoice voice) {
-        if (consumer.isRunning())
+        if (!reinitializing)
             return speech.setVoice(voice);
         return false;
     }
