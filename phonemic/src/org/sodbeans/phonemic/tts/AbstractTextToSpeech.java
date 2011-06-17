@@ -146,4 +146,15 @@ public abstract class AbstractTextToSpeech implements TextToSpeech {
         
         return false;
     }
+    
+    @Override
+    public void setSpeechEnabled(boolean enabled) {
+        // Do nothing. This is implemented in SpeechBridge.
+    }
+    
+    @Override
+    public boolean isSpeechEnabled() {
+        // Always return true. This is also implemented in SpeechBridge.
+        return true;
+    }
 }

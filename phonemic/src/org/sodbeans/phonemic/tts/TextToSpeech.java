@@ -319,5 +319,17 @@ public interface TextToSpeech {
      */
     public boolean stop();
     
+    /**
+     * Set whether or not speech is enabled. If speech is disabled, all
+     * speak calls will be ignored.
+     * @param enabled 
+     */
+    public void setSpeechEnabled(boolean enabled);
     
+    /**
+     * Returns whether or not speech is currently enabled. By default, speech
+     * is enabled.
+     * @return 
+     */
+    public boolean isSpeechEnabled();
 }

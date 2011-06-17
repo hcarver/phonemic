@@ -24,7 +24,7 @@ import org.sodbeans.phonemic.tts.TextToSpeechEngine;
  *
  * @author Andreas Stefik and Jeff Wilson
  */
-public class SpeechBridge implements TextToSpeech{
+public class SpeechBridge implements TextToSpeech{    
     /**
      * Takes TTS requests from the given PriorityBlockingQueue q and passes
      * them off to the TTS engine in the order denoted by their priority.
@@ -88,7 +88,7 @@ public class SpeechBridge implements TextToSpeech{
                         if (proc != null)
                             textToSpeak = proc.process();
                         
-                        if (textToSpeak != null)
+                        if (textToSpeak != null && speechEnabled)
                             speech.speak(textToSpeak, request.getPriority(), request.getType());
 
                         // We don't want to log CHARACTER requests.
@@ -111,6 +111,7 @@ public class SpeechBridge implements TextToSpeech{
             new PriorityBlockingQueue<SpeechRequest>(1000);
     private TextToSpeech speech = null;
     private ConsumerThread consumer = new ConsumerThread(speechQueue);
+    private boolean speechEnabled;
 
     @Override
     public boolean canBlock() {
@@ -305,7 +306,7 @@ public class SpeechBridge implements TextToSpeech{
 
     @Override
     public boolean speak(final String text, final SpeechPriority priority, final RequestType type) {
-         if (text == null) {
+         if (!speechEnabled || text == null) {
             return false;
         }
 
@@ -329,12 +330,7 @@ public class SpeechBridge implements TextToSpeech{
 
     @Override
     public boolean speak(SpeechProcessor proc) {
-        if (proc == null) {
-            return false;
-        }
-        else if (proc.getText().trim().length() == 0 && proc.getRequestType() != RequestType.CHARACTER
-                && proc.process().trim().length() == 0 ) {
-            // We don't want to pass blank text.
+        if (!speechEnabled || proc == null || (proc.getText().trim().length() == 0 && proc.getRequestType() != RequestType.CHARACTER)) {
             return false;
         }
         
@@ -366,13 +362,7 @@ public class SpeechBridge implements TextToSpeech{
 
     @Override
     public synchronized boolean speakBlocking(String text, SpeechPriority priority, RequestType type) {
-        if (text == null) {
-            return false;
-        }
-
-        // Don't pass blank strings...
-        if (text.trim().length() == 0)
-        {
+        if (text == null || text.trim().length() == 0 || !speechEnabled) {
             return false;
         }
 
@@ -403,7 +393,7 @@ public class SpeechBridge implements TextToSpeech{
 
     @Override
     public synchronized boolean speakBlocking(char c, SpeechPriority priority) {
-        if (speech.canBlock()) {
+        if (speech.canBlock() && speechEnabled) {
             consumer.setBlocking(true);
             boolean result = speech.speakBlocking(c);
             consumer.setBlocking(false);
@@ -468,5 +458,15 @@ public class SpeechBridge implements TextToSpeech{
         }
         
         return engines.iterator();
+    }
+
+    @Override
+    public void setSpeechEnabled(boolean enabled) {
+        speechEnabled = enabled;
+    }
+    
+    @Override
+    public boolean isSpeechEnabled() {
+        return speechEnabled;
     }
 }
