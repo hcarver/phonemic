@@ -111,7 +111,7 @@ public class SpeechBridge implements TextToSpeech{
             new PriorityBlockingQueue<SpeechRequest>(1000);
     private TextToSpeech speech = null;
     private ConsumerThread consumer = new ConsumerThread(speechQueue);
-    private boolean speechEnabled;
+    private boolean speechEnabled = true;
 
     @Override
     public boolean canBlock() {
