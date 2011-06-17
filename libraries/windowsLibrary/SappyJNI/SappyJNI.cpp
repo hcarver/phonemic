@@ -85,6 +85,7 @@ JNIEXPORT jboolean JNICALL Java_org_sapi_TextToSpeech_setTextToSpeechEngine
 	CString jaws_string = L"JAWS";
 	CString nvda_string = L"NVDA";
 	CString sapi_string = L"MICROSOFT_SAPI";
+	SpeakInterface *NewInterface = NULL;
 
 	bool jaws_request = input.Compare(jaws_string) == 0;
 	bool nvda_request = input.Compare(nvda_string) == 0;
@@ -92,12 +93,6 @@ JNIEXPORT jboolean JNICALL Java_org_sapi_TextToSpeech_setTextToSpeechEngine
 
 	if(!jaws_request && !nvda_request && !sapi_request) {
 		return false;	
-	}
-
-	if(Interface != NULL) {
-		Interface->Unload();
-		delete Interface;
-		Interface = NULL;
 	}
 
 	SpeakInterface *JawsTest,*NVDATest;
@@ -108,33 +103,32 @@ JNIEXPORT jboolean JNICALL Java_org_sapi_TextToSpeech_setTextToSpeechEngine
 		if(JawsTest->Load() && JawsTest->Speak(L"",true)){
 			delete JawsTest;
 			delete NVDATest;
-			Interface = new JawsInterface();
-			return true;
-		}
-		else {
-			return false;
+			NewInterface = new JawsInterface();
 		}
 	}
 	else if(nvda_request) {
 		if(NVDATest->Load()){
 			delete JawsTest;
 			delete NVDATest;
-			Interface = new NVDAInterface();
-			Interface->Speak(L"", true);
-			return true;
-		}
-		else {
-			return false;
+			NewInterface = new NVDAInterface();
+			NewInterface->Speak(L"", true);
 		}
 	}
 	else if(sapi_request) {
 		delete JawsTest;
 		delete NVDATest;
-		Interface = new SapiInterface();
-		Interface->Load();
-		Interface->Speak(L"", true);
+		NewInterface = new SapiInterface();
+		NewInterface->Load();
+		NewInterface->Speak(L"", true);
+	}
+
+	if(NewInterface != NULL) {
+		Interface->Unload();
+		delete Interface;
+		Interface = NewInterface;
 		return true;
 	}
+
 	return false;
 }
 

@@ -247,8 +247,18 @@ public class WindowsSpeak extends AbstractTextToSpeech{
      * @param engine
      * @return
      */
+    @Override
     public boolean setTextToSpeechEngine(TextToSpeechEngine engine) {
-        return sapi.setTextToSpeechEngine(engine.getEngineName());
+        boolean result = sapi.setTextToSpeechEngine(engine.getEngineName());
+        
+        if (result) {
+            // Restore defaults.
+            this.setVolume(0.5);
+            this.setSpeed(0.5);
+            this.setPitch(0.5);
+        }
+        
+        return result;
     }
 
     @Override

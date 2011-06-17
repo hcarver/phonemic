@@ -194,7 +194,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;C:\Program Files\Java\jdk1.6.0_22\include&quot;;&quot;C:\Program Files\Java\jdk1.6.0_22\include\win32&quot;"
+				AdditionalIncludeDirectories="&quot;C:\Program Files\Java\jdk1.6.0_25\include&quot;;&quot;C:\Program Files\Java\jdk1.6.0_25\include\win32&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
@@ -266,7 +266,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;C:\Program Files\Java\jdk1.6.0_22\include&quot;;&quot;C:\Program Files\Java\jdk1.6.0_22\include\win32&quot;"
+				AdditionalIncludeDirectories="&quot;C:\Program Files\Java\jdk1.6.0_25\include&quot;;&quot;C:\Program Files\Java\jdk1.6.0_25\include\win32&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
@@ -285,6 +285,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="$(NoInherit), nvdaControllerClient64.lib"
+				OutputFile="$(OutDir)\$(ProjectName)64.dll"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				TargetMachine="17"

@@ -139,4 +139,11 @@ public abstract class AbstractTextToSpeech implements TextToSpeech {
         // Implemented in speech bridge--this should never be called.
         return null;
     }
+    
+    @Override
+    public boolean setTextToSpeechEngine(TextToSpeechEngine engine) {
+        // Implemented in SpeechBridge, except for WindowsSpeak.
+        
+        return false;
+    }
 }

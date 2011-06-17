@@ -104,6 +104,16 @@ public interface TextToSpeech {
     public TextToSpeechEngine getTextToSpeechEngine();
     
     /**
+     * Sets the text to speech engine to be used by the system. Note that
+     * after this function is called, all settings will be lost, such as
+     * speed, pitch, volume and voice.
+     * 
+     * @param engine
+     * @return true if the engine was changed successfully, false otherwise.
+     */
+    public boolean setTextToSpeechEngine(TextToSpeechEngine engine);
+    
+    /**
      * Returns the available engines on the system.
      * 
      * @return 

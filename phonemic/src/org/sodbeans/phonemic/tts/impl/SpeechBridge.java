@@ -173,6 +173,34 @@ public class SpeechBridge implements TextToSpeech{
     }
 
     @Override
+    public boolean setTextToSpeechEngine(TextToSpeechEngine engine) {
+        // On Windows, we need to set the engine in the SAPI DLL.
+        if (OperatingSystem.getOS() == OperatingSystem.WINDOWS7 ||
+                OperatingSystem.getOS() == OperatingSystem.WINDOWS_VISTA ||
+                OperatingSystem.getOS() == OperatingSystem.WINDOWS_XP) {
+            return speech.setTextToSpeechEngine(engine);
+        }
+        else if (OperatingSystem.getOS() == OperatingSystem.MAC_OSX) {
+            if (engine == TextToSpeechEngine.APPLE_CARBON) {
+                speech = new CarbonSpeak();
+                return true;
+            }
+            else if (engine == TextToSpeechEngine.APPLE_SAY) {
+                speech = new AppleSaySpeak();
+                return true;
+            }
+        }
+        else if (OperatingSystem.getOS() == OperatingSystem.LINUX) {
+            if (engine == TextToSpeechEngine.SPEECH_DISPATCHER) {
+                speech = new LinuxSpeak();
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    @Override
     public double getVolume() {
         return speech.getVolume();
     }
