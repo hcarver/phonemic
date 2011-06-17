@@ -37,6 +37,8 @@ public class SpeechBridge implements TextToSpeech{
         private PriorityBlockingQueue<SpeechRequest> queue;
         private volatile Thread blinker;
         private boolean block = false;
+        private boolean running = false;
+        
         private SpeechRequest lastRequest =
                 new SpeechRequest();
 
@@ -53,10 +55,12 @@ public class SpeechBridge implements TextToSpeech{
         }
         
         public void start() {
-            blinker = new Thread(this);
-            blinker.start();
+            if (!running) {
+                blinker = new Thread(this);
+                blinker.start();
+            }
         }
-
+        
         /**
          * Set whether or not the TTS engine should be blocking.
          *
@@ -72,13 +76,13 @@ public class SpeechBridge implements TextToSpeech{
         public void run() {
             try {
                 Thread thisThread = Thread.currentThread();
+                running = true;
                 while (thisThread == blinker) {
                     SpeechRequest request = queue.take();
 
                     // If we aren't blocking and we aren't speaking or this is
                     // of greater priority, send off to the TTS engine.
                     // Otherwise, we ignore te request.
-                    //System.out.println(request.getText() + " " + request.getPriority());
 
                     if (!block && (!speech.isSpeaking() ||
                             request.getPriority().compareTo(lastRequest.getPriority()) <= 0)) {
@@ -96,14 +100,25 @@ public class SpeechBridge implements TextToSpeech{
                             lastRequest = request;
                     }
                 }
-
+                running = false;
                 blinker = null;
             }
-            catch (InterruptedException e) { }
+            catch (InterruptedException e) {
+                running = false;
+                blinker = null;
+            }
         }
 
         public void stop() {
-            blinker = null;
+            if (blinker != null)
+                blinker.interrupt();
+        }
+
+        /**
+         * @return the running
+         */
+        public boolean isRunning() {
+            return running;
         }
     }
 
@@ -223,7 +238,14 @@ public class SpeechBridge implements TextToSpeech{
 
     @Override
     public void reinitialize() {
+        // Stop any current speech and disable speech, until reinitialize is
+        // complete.
+        consumer.stop();
+        speechEnabled = false;
+        speech.stop();
         speech.reinitialize();
+        speechEnabled = true;
+        consumer.start();
     }
 
     @Override
@@ -254,22 +276,30 @@ public class SpeechBridge implements TextToSpeech{
 
     @Override
     public boolean setVolume(double vol) {
-        return speech.setVolume(vol);
+        if (consumer.isRunning())
+            return speech.setVolume(vol);
+        return false;
     }
 
     @Override
     public boolean setSpeed(double speed) {
-        return speech.setSpeed(speed);
+        if (consumer.isRunning())
+            return speech.setSpeed(speed);
+        return false;
     }
 
     @Override
     public boolean setPitch(double pitch) {
-        return speech.setPitch(pitch);
+        if (consumer.isRunning())
+            return speech.setPitch(pitch);
+        return false;
     }
 
     @Override
     public boolean setVoice(SpeechVoice voice) {
-        return speech.setVoice(voice);
+        if (consumer.isRunning())
+            return speech.setVoice(voice);
+        return false;
     }
 
     @Override
