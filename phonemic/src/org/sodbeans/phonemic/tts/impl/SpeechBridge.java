@@ -363,7 +363,7 @@ public class SpeechBridge implements TextToSpeech{
 
     @Override
     public boolean speak(SpeechProcessor proc) {
-        if (!speechEnabled || proc == null || (proc.getText().trim().length() == 0 && proc.getRequestType() != RequestType.CHARACTER)) {
+        if (!speechEnabled || proc == null) {
             return false;
         }
         
