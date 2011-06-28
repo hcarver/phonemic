@@ -92,7 +92,7 @@ public class SpeechBridge implements TextToSpeech{
                         if (proc != null)
                             textToSpeak = proc.process();
                         
-                        if (textToSpeak != null && speechEnabled)
+                        if (textToSpeak != null && !textToSpeak.trim().isEmpty() && speechEnabled)
                             speech.speak(textToSpeak, request.getPriority(), request.getType());
 
                         // We don't want to log CHARACTER requests.
