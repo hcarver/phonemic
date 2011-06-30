@@ -174,14 +174,13 @@ public class AppleSaySpeak extends AbstractTextToSpeech {
     @Override
     public boolean setVolume(double vol)
     {
-        double newVol = vol;
-
         if (vol < 0.0)
-            newVol = 0.0;
+            vol = 0.0;
         else if (vol > 1.0)
-            newVol = 1.0;
+            vol = 1.0;
 
-        Volume = " [[volm " + newVol + "]]";
+        Volume = " [[volm " + vol + "]]";
+        this.volume = vol;
         return true;
     }
 
@@ -192,8 +191,9 @@ public class AppleSaySpeak extends AbstractTextToSpeech {
         else if (speed > 1.0)
             speed = 1.0;
 
-        speed = (Math.pow(10.0, speed) * 50) + 100;
-        Rate = " [[rate " + speed + "]]";
+        double newSpeed = (Math.pow(10.0, speed) * 50) + 100;
+        Rate = " [[rate " + newSpeed + "]]";
+        this.speed = speed;
         return true;
     }
 

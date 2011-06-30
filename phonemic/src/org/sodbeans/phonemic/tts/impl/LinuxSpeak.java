@@ -128,16 +128,16 @@ public class LinuxSpeak extends AbstractTextToSpeech {
         double newVol = vol;
 
         if (vol < 0.0)
-            newVol = 0.0;
+            vol = 0.0;
         else if (vol > 1.0)
-            newVol = 1.0;
+            vol = 1.0;
 
         newVol = (200 * newVol) - 100;
 
         boolean result = setVolumeNative((int)Math.ceil(newVol));
 
         if (result) {
-            this.volume = newVol;
+            this.volume = vol;
         }
 
         return result;
@@ -148,16 +148,16 @@ public class LinuxSpeak extends AbstractTextToSpeech {
         double newSpeed = speed;
 
         if (speed < 0.0)
-            newSpeed = 0.0;
+            speed = 0.0;
         else if (speed > 1.0)
-            newSpeed = 1.0;
+            speed = 1.0;
 
         newSpeed = (Math.pow(10, newSpeed) * 11) - 10;
 
         boolean result = setSpeedNative((int)Math.ceil(newSpeed));
 
         if (result) {
-            this.speed = newSpeed;
+            this.speed = speed;
         }
 
         return result;
@@ -165,6 +165,11 @@ public class LinuxSpeak extends AbstractTextToSpeech {
 
     @Override
     public boolean setPitch(double pitch) {
+       if (pitch < 0.0)
+           pitch = 0.0;
+       else if (pitch > 1.0)
+           pitch = 1.0;
+       
        if (setSpeechDispatcherPitch(pitch)) {
             this.pitch = pitch;
 

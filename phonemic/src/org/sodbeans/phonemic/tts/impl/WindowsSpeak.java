@@ -186,7 +186,7 @@ public class WindowsSpeak extends AbstractTextToSpeech{
         if (getTextToSpeechEngine() != TextToSpeechEngine.MICROSOFT_SAPI)
             return false;
 
-         if (pitch < 0.0)
+        if (pitch < 0.0)
             pitch = 0.0;
         else if (pitch > 1.0)
             pitch = 1.0;
