@@ -207,7 +207,7 @@ public class AppleSaySpeak extends AbstractTextToSpeech {
     public boolean setVoice(SpeechVoice voice)
     {
         this.Voice = voice.getName();
-
+        this.voice = voice;
         return true;
     }
 
