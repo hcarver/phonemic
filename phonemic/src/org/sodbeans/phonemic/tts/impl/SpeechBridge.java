@@ -190,31 +190,43 @@ public class SpeechBridge implements TextToSpeech{
     }
 
     @Override
-    public boolean setTextToSpeechEngine(TextToSpeechEngine engine) {
+    public synchronized boolean setTextToSpeechEngine(TextToSpeechEngine engine) {
+        // Stop any current speech and disable speech, until reinitialize is
+        // complete.
+        boolean result = false;
+        consumer.stop();
+        speechEnabled = false;
+        reinitializing = true;
+        speech.stop();
+
         // On Windows, we need to set the engine in the SAPI DLL.
         if (OperatingSystem.getOS() == OperatingSystem.WINDOWS7 ||
                 OperatingSystem.getOS() == OperatingSystem.WINDOWS_VISTA ||
                 OperatingSystem.getOS() == OperatingSystem.WINDOWS_XP) {
-            return speech.setTextToSpeechEngine(engine);
+            reinitializing = false;
+            result = speech.setTextToSpeechEngine(engine);
         }
         else if (OperatingSystem.getOS() == OperatingSystem.MAC_OSX) {
             if (engine == TextToSpeechEngine.APPLE_CARBON) {
                 speech = new CarbonSpeak();
-                return true;
+                result = true;
             }
             else if (engine == TextToSpeechEngine.APPLE_SAY) {
                 speech = new AppleSaySpeak();
-                return true;
+                result = true;
             }
         }
         else if (OperatingSystem.getOS() == OperatingSystem.LINUX) {
             if (engine == TextToSpeechEngine.SPEECH_DISPATCHER) {
                 speech = new LinuxSpeak();
-                return true;
+                result = true;
             }
         }
         
-        return false;
+        speechEnabled = true;
+        reinitializing = false;
+        consumer.start();    
+        return result;
     }
     
     @Override
