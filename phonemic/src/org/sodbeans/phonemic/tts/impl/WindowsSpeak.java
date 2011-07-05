@@ -45,11 +45,11 @@ public class WindowsSpeak extends AbstractTextToSpeech{
         }
         else
         {
-            blockingSupported = true;
+            blockingSupported = false;
             pauseSupported = false;
             resumeSupported = false;
             stopSupported = true;
-            voiceChangeSupported = true;
+            voiceChangeSupported = false;
             volumeChangeSupported = false;
             speedChangeSupported = false;
             pitchChangeSupported = false;  
@@ -212,6 +212,14 @@ public class WindowsSpeak extends AbstractTextToSpeech{
     @Override
     public void reinitialize() {
         sapi.reinitializeNative();
+        
+        // Reset our defaults.
+        this.setVolume(0.5);
+        this.setSpeed(0.5);
+        this.setPitch(0.5);
+
+    // Parse voices again
+        voices = SpeechVoice.parseNativeVoicesString(sapi.getVoicesNative());
     }
     
     @Override
@@ -250,12 +258,38 @@ public class WindowsSpeak extends AbstractTextToSpeech{
     @Override
     public boolean setTextToSpeechEngine(TextToSpeechEngine engine) {
         boolean result = sapi.setTextToSpeechEngine(engine.getEngineName());
-        
+
         if (result) {
             // Restore defaults.
             this.setVolume(0.5);
             this.setSpeed(0.5);
             this.setPitch(0.5);
+            
+            // Update our capabilities.
+            if (engine == TextToSpeechEngine.MICROSOFT_SAPI) {
+                blockingSupported = true;
+                pauseSupported = true;
+                resumeSupported = true;
+                stopSupported = true;
+                voiceChangeSupported = true;
+                volumeChangeSupported = true;
+                speedChangeSupported = true;
+                pitchChangeSupported = true;
+            }
+            else
+            {
+                blockingSupported = false;
+                pauseSupported = false;
+                resumeSupported = false;
+                stopSupported = true;
+                voiceChangeSupported = false;
+                volumeChangeSupported = false;
+                speedChangeSupported = false;
+                pitchChangeSupported = false;  
+            }
+            
+            // Parse voices
+            voices = SpeechVoice.parseNativeVoicesString(sapi.getVoicesNative());
         }
         
         return result;
