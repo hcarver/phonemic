@@ -17,6 +17,7 @@ using namespace SappyJNI;
 
 //Create an interface for potential screen readers
 SpeakInterface *Interface;
+const jchar *Engine = NULL; // the last requested engine.
 
 typedef std::basic_string<TCHAR> tstring;
 
@@ -72,14 +73,7 @@ JNIEXPORT jstring JNICALL Java_org_sapi_TextToSpeech_getTextToSpeechEngine
 	}
 }
 
-/*
- * Attempts to set the text to speech engine.
- */
-JNIEXPORT jboolean JNICALL Java_org_sapi_TextToSpeech_setTextToSpeechEngine
-(JNIEnv *env,jobject obj,jstring str) {
-	jboolean isCopy;
-
-	const jchar* stringChars = (env)->GetStringChars(str, &isCopy);
+bool setEngine(const jchar *stringChars) {
 	LPCWSTR sayThis = (LPCWSTR)stringChars;
 	CString input = sayThis;
 	CString jaws_string = L"JAWS";
@@ -130,6 +124,19 @@ JNIEXPORT jboolean JNICALL Java_org_sapi_TextToSpeech_setTextToSpeechEngine
 	}
 
 	return false;
+}
+/*
+ * Attempts to set the text to speech engine.
+ */
+JNIEXPORT jboolean JNICALL Java_org_sapi_TextToSpeech_setTextToSpeechEngine
+(JNIEnv *env,jobject obj,jstring str) {
+	jboolean isCopy;
+	
+	// Set the last requested engine.
+
+	const jchar* stringChars = (env)->GetStringChars(str, &isCopy);
+	Engine = stringChars;
+	return setEngine(stringChars);
 }
 
 /*
@@ -227,6 +234,14 @@ JNIEXPORT void JNICALL Java_org_sapi_TextToSpeech_speakBlockNative
 JNIEXPORT void JNICALL Java_org_sapi_TextToSpeech_reinitializeNative
 	(JNIEnv *env,jobject obj)
 {
+	jboolean isCopy;
+	if (Engine != NULL) {
+		// Re-load by changing the engine again.
+		setEngine(Engine);
+		return;
+	}
+
+	// No engine is selected--use the default method.
 	Interface->Unload();
 	delete Interface;
 
