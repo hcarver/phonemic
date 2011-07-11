@@ -57,6 +57,7 @@ public class SpeechBridge implements TextToSpeech{
         public void start() {
             if (!running) {
                 blinker = new Thread(this);
+                blinker.setName("Phonemic Consumer Thread");
                 blinker.start();
             }
         }

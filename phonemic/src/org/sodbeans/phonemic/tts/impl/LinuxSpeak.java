@@ -67,7 +67,7 @@ public class LinuxSpeak extends AbstractTextToSpeech {
      * @param pitch
      * @return
      */
-    private boolean setSpeechDispatcherPitch(double pitch) {
+    private synchronized boolean setSpeechDispatcherPitch(double pitch) {
         double newPitch = pitch;
 
         if (pitch < 0.0)
@@ -124,7 +124,7 @@ public class LinuxSpeak extends AbstractTextToSpeech {
     }
 
     @Override
-    public boolean setVolume(double vol) {
+    public synchronized boolean setVolume(double vol) {
         double newVol = vol;
 
         if (vol < 0.0)
@@ -144,7 +144,7 @@ public class LinuxSpeak extends AbstractTextToSpeech {
     }
 
     @Override
-    public boolean setSpeed(double speed) {
+    public synchronized boolean setSpeed(double speed) {
         double newSpeed = speed;
 
         if (speed < 0.0)
@@ -180,7 +180,7 @@ public class LinuxSpeak extends AbstractTextToSpeech {
     }
     
     @Override
-    public boolean setVoice(SpeechVoice voice) {
+    public synchronized boolean setVoice(SpeechVoice voice) {
         boolean result =  setVoiceNative(voice.getName());
 
         if (result) {
@@ -206,12 +206,12 @@ public class LinuxSpeak extends AbstractTextToSpeech {
     }
     
     @Override
-    public boolean speakBlocking(String text, SpeechPriority priority, RequestType type) {
+    public synchronized boolean speakBlocking(String text, SpeechPriority priority, RequestType type) {
         return speak(text, type, true);
     }
 
     @Override
-    public boolean speakBlocking(char c, SpeechPriority priority) {
+    public synchronized boolean speakBlocking(char c, SpeechPriority priority) {
         return speak(Character.toString(c), RequestType.CHARACTER, true);
     }
 
@@ -222,12 +222,12 @@ public class LinuxSpeak extends AbstractTextToSpeech {
     }
     
     @Override
-    public boolean pause() {
+    public synchronized boolean pause() {
         return pauseNative();
     }
 
     @Override
-    public boolean resume() {
+    public synchronized boolean resume() {
         return resumeNative();
     }
 
