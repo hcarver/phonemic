@@ -98,6 +98,8 @@ bool setEngine(const jchar *stringChars) {
 			delete JawsTest;
 			delete NVDATest;
 			NewInterface = new JawsInterface();
+			NewInterface->Load();
+			NewInterface->Speak(L"", true);
 		}
 	}
 	else if(nvda_request) {
