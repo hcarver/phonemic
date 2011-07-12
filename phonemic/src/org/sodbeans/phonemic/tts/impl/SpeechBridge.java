@@ -218,10 +218,8 @@ public class SpeechBridge implements TextToSpeech{
             }
         }
         else if (OperatingSystem.getOS() == OperatingSystem.LINUX) {
-            if (engine == TextToSpeechEngine.SPEECH_DISPATCHER) {
-                speech = new LinuxSpeak();
-                result = true;
-            }
+            // only one engine available, so assume change happened.
+            result = true;
         }
         
         speechEnabled = true;
