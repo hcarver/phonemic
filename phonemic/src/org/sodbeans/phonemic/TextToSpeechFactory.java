@@ -69,8 +69,13 @@ public class TextToSpeechFactory {
         else if (os == OperatingSystem.LINUX) {
             // Our only option is speech-dispatcher.
             try {
-                loadLibrary("LinuxSpeakJNI");
-                linuxLibraryLoaded = true;
+                if (OperatingSystem.getNumberBits() == 32) {
+                    loadLibrary("LinuxSpeakJNI");
+                    linuxLibraryLoaded = true;
+                } else {
+                    loadLibrary("LinuxSpeakJNI64");
+                    linuxLibraryLoaded = true;
+                }
             }
             catch (Exception e) {
                 StackTraceElement[] stackTrace = e.getStackTrace();
