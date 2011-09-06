@@ -254,4 +254,62 @@ public class TextToSpeechFactory {
             System.load(JNIPath + "/" + libFullName);
         }
     }
+    
+    /**
+     * Returns whether or not the given file exists.
+     * @param path
+     * @return 
+     */
+    private static boolean fileExists(String path) {
+        File f = new File(path);
+        
+        return f.exists();
+    }
+    /**
+     * Determines if the given JAWS script is installed. This function checks
+     * for the following path names, where %APPDATA% is the AppData environment
+     * variable.
+     * 
+     * %APPDATA%\Freedom Scientific\JAWS\12.0\Settings\enu\$name.jcf
+     * %APPDATA%\Freedom Scientific\JAWS\12.0\Settings\enu\$name.jss
+     * %APPDATA%\Freedom Scientific\JAWS\12.0\Settings\enu\$name.jsb
+     * %APPDATA%\Freedom Scientific\JAWS\12.0\Settings\enu\$name.jsd
+     * %APPDATA%\Freedom Scientific\JAWS\12.0\Settings\enu\$name.jsh
+     * 
+     * @param name the script name to search for
+     * @return 
+     */
+    public static boolean jawsScriptExists(String name) {
+        if (!isWindows())
+            return false;
+        
+        String appData = System.getenv("AppData");
+        
+        return fileExists(appData + "\\Freedom Scientific\\JAWS\\12.0\\Settings\\enu\\" + name + ".jcf")
+                || fileExists(appData + "\\Freedom Scientific\\JAWS\\12.0\\Settings\\enu\\" + name + ".jsb")
+                || fileExists(appData + "\\Freedom Scientific\\JAWS\\12.0\\Settings\\enu\\" + name + ".jsd")
+                || fileExists(appData + "\\Freedom Scientific\\JAWS\\12.0\\Settings\\enu\\" + name + ".jsh")
+                || fileExists(appData + "\\Freedom Scientific\\JAWS\\12.0\\Settings\\enu\\" + name + ".jss");
+    }
+    
+    /**
+     * Determine if the given NVDA script is installed. THis function checks
+     * for the following path names, where %APPDATA% is the AppData environment
+     * variable.
+     * 
+     * %APPDATA%\nvda\appModules\$name.py
+     * %APPDATA%\nvda\appModules\$name.pyo
+     * 
+     * @param name the script name to search for.
+     * @return 
+     */
+    public static boolean nvdaScriptExists(String name) {
+        if (!isWindows())
+            return false;
+        
+        String appData = System.getenv("AppData");
+
+        return fileExists(appData + "\\nvda\\appModules\\" + name + ".py")
+                || fileExists(appData + "\\nvda\\appModules\\" + name + ".pyo");
+    }
 }
