@@ -261,7 +261,7 @@ public class WindowsSpeak extends AbstractTextToSpeech{
 
         if (result) {
             // Restore defaults.
-            this.setVolume(0.5);
+            this.setVolume(1.0);
             this.setSpeed(0.5);
             this.setPitch(0.5);
             

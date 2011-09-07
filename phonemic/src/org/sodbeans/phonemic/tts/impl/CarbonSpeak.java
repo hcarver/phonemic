@@ -51,7 +51,7 @@ public class CarbonSpeak extends AbstractTextToSpeech {
         loadVoices();
 
         // Some nice defaults for our parameters.
-        volume = 0.5;
+        volume = 1.0;
         speed = 0.5;
         pitch = 0.5;
 

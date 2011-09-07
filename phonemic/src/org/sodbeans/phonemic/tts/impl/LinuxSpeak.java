@@ -49,6 +49,10 @@ public class LinuxSpeak extends AbstractTextToSpeech {
         speedChangeSupported = true;
         pitchChangeSupported = true;
         
+        volume = 1.0;
+        speed = 0.5;
+        pitch = 0.5;
+        
         initializeNative();
         voices = SpeechVoice.parseNativeVoicesString(getVoicesNative());
     }

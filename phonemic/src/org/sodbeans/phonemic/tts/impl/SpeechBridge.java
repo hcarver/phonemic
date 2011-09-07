@@ -476,7 +476,7 @@ public class SpeechBridge implements TextToSpeech{
         this.speech = speech;
 
         // Set some good defaults.
-        this.speech.setVolume(0.5);
+        this.speech.setVolume(1.0);
         this.speech.setSpeed(0.5);
         this.speech.setPitch(0.5);
         

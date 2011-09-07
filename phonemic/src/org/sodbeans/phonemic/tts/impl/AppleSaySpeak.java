@@ -33,8 +33,8 @@ public class AppleSaySpeak extends AbstractTextToSpeech {
         pitchChangeSupported = false; // not supported by `say' command
 
         // A nice default speed and volume.
+        volume = 1.0;
         speed = 0.5;
-        volume = 0.5;
 
         loadVoices();
     }
