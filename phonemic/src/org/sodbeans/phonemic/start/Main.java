@@ -37,9 +37,6 @@ public class Main {
                 speech.speakBlocking(text);
             }
         }
-
-        // Need to explicitly call exit or we just hang...
-        System.exit(0);
     }
 
     private static void init() {

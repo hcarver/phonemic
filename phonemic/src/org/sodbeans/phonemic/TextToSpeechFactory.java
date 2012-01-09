@@ -39,7 +39,11 @@ public class TextToSpeechFactory {
 
         if (os == OperatingSystem.MAC_OSX) {
             try {
-                loadLibrary("CarbonSpeakJNI");
+                if (System.getProperty("os.arch").trim().equalsIgnoreCase("ppc"))
+                    loadLibrary("CarbonSpeakJNI_PPC");
+                else
+                    loadLibrary("CarbonSpeakJNI");
+                
                 carbonLibraryLoaded = true;
             }
             catch (Exception e) {
