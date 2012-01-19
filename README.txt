@@ -1,60 +1,20 @@
-= Phonemic version 1.0, June 1, 2011 =
+= Phonemic version 1.2, January 19, 2012 =
 
 == Introduction ==
-This is the first official release of the Phonemic speech library. Phonemic is a Java library that allows its users to write cross-platform speaking applications.
+This is the second official release of the Phonemic speech library. This update primarily consists of minor bug fixes and added support for the PowerPC
+architecture on Mac OS X systems.
 
-== Big Features ==
- * Support for many major speech systems, including Microsoft SAPI, JAWS, NVDA, VoiceOver and ORCA.
- * Provides a single API to communicate with all engines.
- * Support for various types of speech modifications (when available):
-	* Volume control
-	* Pitch control (either manually or automatically through the speakChar functions).
-	* Speed control
- * Speech modifications are consistent across engines.
- * Support for blocking speech calls (when available).
- * Ability to query an engine for its features.
- * Ability to switch engines on the fly (Windows and Mac OS X only).
- * A queuing system that enables the use of speech priorities, even when not supported natively by the engine.
- * A speech processing mechanism to enable advanced pre-processing of speech before it is sent to an engine.
- * Ability to query for / change voice when supported by the engine.
+== Bug Fixes ==
+This release fixes various minor bugs found in the last Phonemic release, 1.0. The most critical bug fixed would cause Phonemic to hang when an application closed,
+causing the application to remain open until closed manually by the user.
 
-== Supported Engines ==
-Phonemic currently supports the following platforms and speech engines:
-
- * Windows XP, Windows Vista and Windows 7:
-	* Microsoft Speech API (SAPI)
-	* JAWS
-	* NVDA
- * Mac OS X
-	* Carbon (on Intel Macs only), the same speech interface used by VoiceOver.
-	* The `say' command
- * Linux
-	* speech-dispatcher (available by default on Vinux and Ubuntu), the same speech interface used by ORCA.
-
-== Usage ==
-The Phonemic library is a .jar file that must be included in your java project. In addition to the phonemic.jar file, your program must include the appropriate JNI libraries for the various platforms you intend to support. These files can be found under the jni directory. For more information on how to use Phonemic, see the wiki page:
-	https://sourceforge.net/apps/trac/phonemic/wiki/UsingPhonemic
-
-The libraries are as follows. Note that if you do not intend to support a particular platform, you do not have to include its libraries in your distribution.
-
- * Windows XP (32-bit only), Windows Vista and Windows 7
-	* Interop.SpeechLib.5.3.dll (SAPI supporting DLLs)
-	* SappyJNI.dll (SAPI, JAWS and NVDA support, 32-bit)
-	* SappyJNI64.dll (SAPI, JAWS and NVDA support, 64-bit)
-	* nvdaControllerClient[32|64].dll (NVDA support)
- * Mac OS X
-	* libCarbonSpeakJNI.jnilib (Carbon support)
- * Linux
-	* libLinuxSpeakJNI.so (speech-dispatcher support)
-
-A simple demo application is included as a Netbeans project under the example directory.
+== Added Support ==
+This release now includes support for the PowerPC architecture on Mac OS X systems. A new library file is now included in the JNI folder, called "libCarbonSpeakJNI_PPC.jnilib".
 
 == Build Notes ==
-Although libraries come with Phonemic pre-built, should you want to modify any of them, it is necessary to use the following systems.
+For notes on modifying included libraries, please see the 1.0 release notes. However, should you desire to modify the PowerPC libraries included with Phonemic,
+XCode 3 (3.2.1 preferred) must be used, with the "Active Architecture" setting on "ppc." Note that the same codebase is used for both the Intel and PowerPC
+libraries.
 
- * Windows
-	* To modify the Windows DLL (SappyJNI/SappyJNI64.dll), Visual Studio 2008 must be used. The libraries will build on Visual Studio 2010, however, they will not run on all systems. 
- * Mac OS X
-	* To modify the Carbon speech library, libCarbonSpeakJNI.jnilib, you must use XCode 3. (3.2.1 preferred) XCode 4 has not been tested.
- * Linux
-	* The Linux library (libLinuxSpeakJNI.so) can be loaded as a standard Netbeans project.
+== Further Information ==
+For more information on setting up Phonemic,  please see the release notes for the 1.0 release.
