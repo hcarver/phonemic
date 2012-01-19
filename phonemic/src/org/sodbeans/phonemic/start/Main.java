@@ -31,7 +31,7 @@ public class Main {
             String text = args[0];
             if(args[0].compareTo("-path") == 0) {
                 String path = System.getProperty("java.library.path");
-                System.out.println(path);
+                System.out.println("Your JNI path for loading Phonemic libraries is: " + path);
             }
             else{
                 speech.speakBlocking(text);
