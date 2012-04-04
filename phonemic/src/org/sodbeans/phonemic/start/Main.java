@@ -5,9 +5,11 @@
 
 package org.sodbeans.phonemic.start;
 
+import java.io.IOException;
 import java.util.Iterator;
 import org.sodbeans.phonemic.*;
 import org.sodbeans.phonemic.tts.*;
+import org.sodbeans.phonemic.tts.impl.ClientSpeak;
 
 /**
  *
@@ -22,10 +24,19 @@ public class Main {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, InterruptedException {
         Main.init();
         if(args.length == 0) {
-            speech.speakBlocking("If you're hearing this output, then Phonemic is working!");
+            //speech.speakBlocking("If you're hearing this output, then Phonemic is working!");
+            
+            // Client testing code--start a server and connect to it.
+            TextToSpeechFactory.startPhonemicDaemon();
+            TextToSpeech phonemicClient = TextToSpeechFactory.getPhonemicClient("localhost");
+            
+            System.out.println("Connected!");
+            // hackish
+            ClientSpeak c = (ClientSpeak)phonemicClient;
+            c.sendRawMessage("foo");
         }
         else if (args.length == 1) {
             String text = args[0];

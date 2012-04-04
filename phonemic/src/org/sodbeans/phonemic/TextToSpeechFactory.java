@@ -6,8 +6,12 @@
 package org.sodbeans.phonemic;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.sodbeans.phonemic.daemon.PhonemicDaemon;
 import org.sodbeans.phonemic.tts.*;
 import org.sodbeans.phonemic.tts.impl.*;
 
@@ -18,6 +22,10 @@ import org.sodbeans.phonemic.tts.impl.*;
  * @author Andreas Stefik and Jeff Wilson
  */
 public class TextToSpeechFactory {
+    /**
+     * The TCP port where the Phonemic daemon will be listening.
+     */
+    public static final int PHONEMIC_SERVER_PORT = 56101;
     
     private static final OperatingSystem os = OperatingSystem.getOS();
     private static boolean carbonLibraryLoaded = false;
@@ -33,7 +41,7 @@ public class TextToSpeechFactory {
     private static AppleSaySpeak appleSaySpeak = null;
     private static WindowsSpeak windowsSpeak = null;
     private static LinuxSpeak linuxSpeak = null;
-
+    
     static {
         // Load the proper library for this OS.
 
@@ -189,7 +197,41 @@ public class TextToSpeechFactory {
 
         return null;
     }
+    
+    /**
+     * Start a new Phonemic server daemon, listening on localhost. The port
+     * number that will be bound is TextToSpeechFactory.HONEMIC_SERVER_PORT.
+     */
+    public synchronized static void startPhonemicDaemon() throws UnknownHostException, IOException {
+        startPhonemicDaemon(InetAddress.getByName("localhost"));
+    }
 
+    /**
+     * Start a new Phonemic daemon that binds on the specified address.
+     * 
+     * @param address 
+     */
+    public static synchronized void startPhonemicDaemon(InetAddress address) throws IOException {
+        PhonemicDaemon daemon = new PhonemicDaemon(PHONEMIC_SERVER_PORT, address);
+        daemon.bind();
+        daemon.start();
+    }
+    
+    /**
+     * Connect to the Phonemic server at 'hostname'. Multiple connections to the
+     * same host are permitted.
+     * 
+     * @param hostname the host we wish to connect to (most commonly, localhost, or "127.0.0.1").
+     * 
+     * @return the client connection interface
+     */
+    public synchronized static TextToSpeech getPhonemicClient(String hostname) throws IOException {
+        ClientSpeak c = new ClientSpeak(hostname, PHONEMIC_SERVER_PORT);
+        c.connect();
+        
+        return c;
+    }
+    
     /**
      * Returns whether the system is on windows.
      *
