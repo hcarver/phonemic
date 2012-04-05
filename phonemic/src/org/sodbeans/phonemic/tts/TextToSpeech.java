@@ -332,4 +332,13 @@ public interface TextToSpeech {
      * @return 
      */
     public boolean isSpeechEnabled();
+    
+    /**
+     * Get the phonemic version being used by this instance of TextToSpeech. If
+     * this instance is connected to a server, this returns the server's Phonemic
+     * version.
+     * 
+     * @return 
+     */
+    public double getVersion();
 }

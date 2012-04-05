@@ -12,10 +12,12 @@ import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.sodbeans.phonemic.RequestType;
+import org.sodbeans.phonemic.SpeechLanguage;
 import org.sodbeans.phonemic.SpeechPriority;
 import org.sodbeans.phonemic.SpeechProcessor;
 import org.sodbeans.phonemic.SpeechVoice;
@@ -106,163 +108,339 @@ public class ClientSpeak implements TextToSpeech {
         }        
     }
     
+    /**
+     * Wait for a boolean response from the server. TODO: Make private
+     * 
+     * @return 
+     */
+    public boolean getBooleanResponse() {
+        try {
+            String line = this.input.readLine();
+            
+            if (line == null)
+                return false;
+            
+            return Boolean.parseBoolean(line);
+        } catch (IOException ex) {
+            Logger.getLogger(ClientSpeak.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
+    
+    /**
+     * Wait for a double response from the server. TODO: Make private
+     * 
+     * @return 
+     */
+    public double getDoubleResponse() {
+        try {
+            String line = this.input.readLine();
+            
+            if (line == null)
+                return 0.0;
+            
+            return Double.parseDouble(line);
+        } catch (IOException ex) {
+            Logger.getLogger(ClientSpeak.class.getName()).log(Level.SEVERE, null, ex);
+            return 0.0;
+        }
+    }
+    
+    /**
+     * Wait for a string response from the server. TODO: Make private
+     * 
+     * @return 
+     */
+    public String getStringResponse() {
+        try {
+            String line = this.input.readLine();
+            
+            if (line == null)
+                return "";
+            
+            return line;
+        } catch (IOException ex) {
+            Logger.getLogger(ClientSpeak.class.getName()).log(Level.SEVERE, null, ex);
+            return "";
+        }
+    }
+    
     public boolean canBlock() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        sendRawMessage("canBlock");
+        
+        return getBooleanResponse();
     }
 
     public boolean canPause() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        sendRawMessage("canPause");
+        
+        return getBooleanResponse();
     }
 
     public boolean canResume() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        sendRawMessage("canResume");
+        
+        return getBooleanResponse();
     }
 
     public boolean canStop() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        sendRawMessage("canStop");
+        
+        return getBooleanResponse();
     }
 
     public boolean canSetVoice() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        sendRawMessage("canSetVoice");
+        
+        return getBooleanResponse();
     }
 
     public boolean canSetVolume() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        sendRawMessage("canSetVolume");
+        
+        return getBooleanResponse();
     }
 
     public boolean canSetSpeed() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        sendRawMessage("canSetSpeed");
+        
+        return getBooleanResponse();
     }
 
     public boolean canSetPitch() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        sendRawMessage("canSetPitch");
+        
+        return getBooleanResponse();
     }
 
     public Iterator<SpeechVoice> getAvailableVoices() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        ArrayList<SpeechVoice> voices = new ArrayList<SpeechVoice>();
+        
+        sendRawMessage("getAvailableVoices");
+        
+        // Parse lines of input until we get a blank line.
+        String line = "";
+        do {
+            try {
+                line = this.input.readLine();
+                SpeechVoice v = new SpeechVoice(line, SpeechLanguage.ENGLISH_US);
+                voices.add(v);
+            } catch (IOException ex) {
+                Logger.getLogger(ClientSpeak.class.getName()).log(Level.SEVERE, null, ex);
+                line = "";
+            }
+        } while (!line.isEmpty());
+        
+        return voices.iterator();
     }
 
     public SpeechVoice getCurrentVoice() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        sendRawMessage("getCurrentVoice");
+        
+        String name = getStringResponse();
+        
+        return new SpeechVoice(name, SpeechLanguage.ENGLISH_US);
     }
 
     public double getSpeed() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        sendRawMessage("getSpeed");
+        
+        return getDoubleResponse();
     }
 
     public TextToSpeechEngine getTextToSpeechEngine() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        sendRawMessage("getTextToSpeechEngine");
+        
+        String name = getStringResponse();
+        
+        return TextToSpeechEngine.valueOf(name);
     }
 
     public boolean setTextToSpeechEngine(TextToSpeechEngine engine) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        sendRawMessage("setTextToSpeechEngine:" + engine.toString());
+        
+        return getBooleanResponse();
     }
 
     public Iterator<TextToSpeechEngine> getAvailableEngines() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        ArrayList<TextToSpeechEngine> engines = new ArrayList<TextToSpeechEngine>();
+        
+        sendRawMessage("getAvailableEngines");
+        
+        // Parse lines of input until we get a blank line.
+        String line = "";
+        do {
+            try {
+                line = this.input.readLine();
+                if (!line.isEmpty())
+                    engines.add(TextToSpeechEngine.valueOf(line));
+            } catch (IOException ex) {
+                Logger.getLogger(ClientSpeak.class.getName()).log(Level.SEVERE, null, ex);
+                line = "";
+            }
+        } while (!line.isEmpty());
+        
+        return engines.iterator();
     }
 
     public double getVolume() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        sendRawMessage("getVolume");
+        
+        return getDoubleResponse();
     }
 
     public double getPitch() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        sendRawMessage("getPitch");
+        
+        return getDoubleResponse();
     }
 
     public boolean isSpeaking() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        sendRawMessage("isSpeaking");
+        
+        return getBooleanResponse();
     }
 
     public boolean pause() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        sendRawMessage("pause");
+        
+        return getBooleanResponse();
     }
 
     public void reinitialize() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        sendRawMessage("reinitialize");
     }
 
     public boolean respeak() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        sendRawMessage("respeak");
+        
+        return getBooleanResponse();
     }
 
     public boolean copyToClipboard() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return false; // not implemented, TODO?
     }
 
     public boolean resume() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        sendRawMessage("resume");
+        
+        return getBooleanResponse();
     }
 
     public boolean setVolume(double vol) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (vol < 0.0)
+            vol = 0.0;
+        else if (vol > 1.0)
+            vol = 1.0;
+        
+        sendRawMessage("setVolume:" + vol);
+        
+        return getBooleanResponse();
     }
 
     public boolean setSpeed(double speed) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (speed < 0.0)
+            speed = 0.0;
+        else if (speed > 1.0)
+            speed = 1.0;
+        
+        sendRawMessage("setSpeed:" + speed);
+        
+        return getBooleanResponse();    
     }
 
     public boolean setPitch(double pitch) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (pitch < 0.0)
+            pitch = 0.0;
+        else if (pitch > 1.0)
+            pitch = 1.0;   
+
+        sendRawMessage("setPitch:" + pitch);
+        
+        return getBooleanResponse();    
     }
 
     public boolean setVoice(SpeechVoice voice) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        sendRawMessage("setVoice:" + voice.toString());
+        
+        return getBooleanResponse();    
     }
 
     public boolean speak(String text) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return speak(text, SpeechPriority.MEDIUM);
     }
 
     public boolean speak(String text, SpeechPriority priority) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return speak(text, priority, RequestType.TEXT);
     }
 
     public boolean speak(String text, SpeechPriority priority, RequestType type) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        sendRawMessage("speak:" + priority.toString() + ":" + type.toString() + ":" + text);
+        
+        return getBooleanResponse();    
     }
 
     public boolean speak(char c) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return speak(c, SpeechPriority.MEDIUM);
     }
 
     public boolean speak(char c, SpeechPriority priority) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        sendRawMessage("speak:" + priority.toString() + ":CHARACTER:" + c);
+        
+        return getBooleanResponse();
     }
 
     public boolean speak(SpeechProcessor proc) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        String text = proc.process();
+        RequestType type = proc.getRequestType();
+        SpeechPriority priority = proc.getPriority();
+        
+        return speak(text, priority, type);
     }
 
     public boolean speakBlocking(String text) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return speakBlocking(text, SpeechPriority.MEDIUM);
     }
 
     public boolean speakBlocking(String text, SpeechPriority priority) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return speakBlocking(text, priority, RequestType.TEXT);
     }
 
     public boolean speakBlocking(String text, SpeechPriority priority, RequestType type) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        sendRawMessage("speakBlocking:" + priority.toString() + ":" + type.toString() + ":" + text);
+        
+        return getBooleanResponse();    
     }
 
     public boolean speakBlocking(char c) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return speakBlocking(c, SpeechPriority.MEDIUM);
     }
 
     public boolean speakBlocking(char c, SpeechPriority priority) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        sendRawMessage("speakBlocking:" + priority.toString() + ":CHARACTER:" + c);
+        
+        return getBooleanResponse();   
     }
 
     public boolean stop() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        sendRawMessage("stop");
+        
+        return getBooleanResponse();
     }
 
     public void setSpeechEnabled(boolean enabled) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        sendRawMessage("setSpeechEnabled:" + enabled);        
     }
 
     public boolean isSpeechEnabled() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        sendRawMessage("isSpeechEnabled");
+        
+        return getBooleanResponse();
+    }
+    
+    public double getVersion() {
+        sendRawMessage("getVersion");
+        
+        return getDoubleResponse();
     }
 }

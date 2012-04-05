@@ -157,4 +157,9 @@ public abstract class AbstractTextToSpeech implements TextToSpeech {
         // Always return true. This is also implemented in SpeechBridge.
         return true;
     }
+    
+    @Override
+    public double getVersion() {
+        return TextToSpeechFactory.PHONEMIC_VERSION;
+    }
 }

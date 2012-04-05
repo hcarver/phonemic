@@ -23,6 +23,11 @@ import org.sodbeans.phonemic.tts.impl.*;
  */
 public class TextToSpeechFactory {
     /**
+     * The Phonemic version of this release.
+     */
+    public static final double PHONEMIC_VERSION = 1.1;
+    
+    /**
      * The TCP port where the Phonemic daemon will be listening.
      */
     public static final int PHONEMIC_SERVER_PORT = 56101;
@@ -144,12 +149,48 @@ public class TextToSpeechFactory {
         }
         return str;
     }
-    /*
-     * Get the specific TTS implementation for this OS.
+
+    /**
+     * Get the default text to speech implementation for this system. This method
+     * will attempt to look for an existing Phonemic server; if one is not found,
+     * a new one will be spawned, listening on TextToSpeechFactory.PHONEMIC_SERVER_PORT,
+     * and bound to localhost. A client talking to this protocol will be returned.
+     * If a Phonemic server cannot be spawned and one is not aleady running,
+     * a local text to speech engine will be used.
      *
-     * returns AbstractTextToSpeech object if OS is supported. null otherwise
+     * 
+     * If an existing Phonemic server is running, it will be used.
+     * @return a text to speech interface
      */
     public synchronized static TextToSpeech getDefaultTextToSpeech() {
+        TextToSpeech tts = null;
+        
+        // Attempt to connect to a local daemon and return.
+        try {
+            tts = TextToSpeechFactory.getPhonemicClient("localhost");
+            return tts;
+        } catch (IOException ex) {
+            // Connection failed -- fall through.
+        }
+
+        // The local server couldn't be reached--try spawning one.
+        PhonemicDaemon daemon;
+        try {
+            daemon = TextToSpeechFactory.newPhonemicDaemon(speech);
+            daemon.bind();
+            daemon.start();
+            
+            // Attempt to connect.
+            tts = TextToSpeechFactory.getPhonemicClient("localhost");
+            return tts;
+        } catch (UnknownHostException ex) {
+            Logger.getLogger(TextToSpeechFactory.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(TextToSpeechFactory.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        // If we make it here, a server couldn't be connected to, nor could we
+        // successfully spawn one. Return a simple speech object.
         return speech;
     }
 
@@ -201,9 +242,11 @@ public class TextToSpeechFactory {
     /**
      * Start a new Phonemic server daemon, listening on localhost. The port
      * number that will be bound is TextToSpeechFactory.HONEMIC_SERVER_PORT.
+     * 
+     * @param textToSpeech the speech engine this daemon will talk to.
      */
-    public synchronized static void startPhonemicDaemon() throws UnknownHostException, IOException {
-        startPhonemicDaemon(InetAddress.getByName("localhost"));
+    public synchronized static PhonemicDaemon newPhonemicDaemon(TextToSpeech textToSpeech) throws UnknownHostException, IOException {
+        return newPhonemicDaemon(textToSpeech, InetAddress.getByName("localhost"));
     }
 
     /**
@@ -211,10 +254,10 @@ public class TextToSpeechFactory {
      * 
      * @param address 
      */
-    public static synchronized void startPhonemicDaemon(InetAddress address) throws IOException {
-        PhonemicDaemon daemon = new PhonemicDaemon(PHONEMIC_SERVER_PORT, address);
-        daemon.bind();
-        daemon.start();
+    public static synchronized PhonemicDaemon newPhonemicDaemon(TextToSpeech textToSpeech, InetAddress address) throws IOException {
+        PhonemicDaemon daemon = new PhonemicDaemon(textToSpeech, PHONEMIC_SERVER_PORT, address);
+        
+        return daemon;
     }
     
     /**

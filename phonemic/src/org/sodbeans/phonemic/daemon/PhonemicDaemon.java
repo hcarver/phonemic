@@ -10,6 +10,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.sodbeans.phonemic.tts.TextToSpeech;
 
 /**
  * A phonemic daemon that listens on the specified address and port.
@@ -38,15 +39,22 @@ public class PhonemicDaemon extends Thread {
     private int backlog = 100;
     
     /**
+     * The text to speech engine we wish to use.
+     */
+    private TextToSpeech textToSpeech = null;
+    
+    /**
      * Create a new Phonemic daemon that listens on the specified port, and is
      * bound to the specified address.
      * 
      * @param port
      * @param address 
      */
-    public PhonemicDaemon(int port, InetAddress address) {
+    public PhonemicDaemon(TextToSpeech textToSpeech, int port, InetAddress address) {
         this.port = port;
         this.address = address;
+        this.textToSpeech = textToSpeech;
+        this.setDaemon(true);
     }
     
     /**
@@ -74,7 +82,7 @@ public class PhonemicDaemon extends Thread {
             
             try {
                 client = this.serverSocket.accept();
-                ClientHandler ch = new ClientHandler(client);
+                ClientHandler ch = new ClientHandler(this.textToSpeech, client);
                 ch.start();
             } catch (IOException ex) {
                 Logger.getLogger(PhonemicDaemon.class.getName()).log(Level.SEVERE, null, ex);

@@ -514,4 +514,9 @@ public class SpeechBridge implements TextToSpeech{
     public boolean isSpeechEnabled() {
         return speechEnabled;
     }
+    
+    @Override
+    public double getVersion() {
+        return speech.getVersion();
+    }
 }

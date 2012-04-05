@@ -10,6 +10,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.sodbeans.phonemic.tts.TextToSpeech;
 
 /**
  * A handler for Phonemic clients.
@@ -21,8 +22,21 @@ public class ClientHandler extends Thread {
      */
     private Socket client = null;
     
-    public ClientHandler(Socket client) {
+    /**
+     * The text to speech engine we wish to use.
+     */
+    private TextToSpeech textToSpeech = null;
+    
+    /**
+     * Initialize a new client handler.
+     * 
+     * @param textToSpeech
+     * @param client 
+     */
+    public ClientHandler(TextToSpeech textToSpeech, Socket client) {
+        this.textToSpeech = textToSpeech;
         this.client = client;
+        this.setDaemon(true);
     }
     
     /**
@@ -61,8 +75,10 @@ public class ClientHandler extends Thread {
         // Select an appropriate recognizer.
         if (version == 0x0001) {
             recognizer = new V1Recognizer();
+            recognizer.setTextToSpeech(textToSpeech);
             try {
                 output.write("OK\n".getBytes());
+                output.flush();
             } catch (IOException ex) {
                 Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
                 return; // failed to write to client.
@@ -80,7 +96,7 @@ public class ClientHandler extends Thread {
         
         // Read input from the client, pass to recognizer.
         while (true) {
-            // Get the message size. will be between 0x00000000 to 0xFFFFFFFF
+            // Get the message size. will be between 0x0000 and 0xFFFF
             int messageSize = 0;
             try {
                 messageSize = input.read();
@@ -97,11 +113,20 @@ public class ClientHandler extends Thread {
                 byte[] data = new byte[messageSize];
                 try {
                     input.read(data);
-                    recognizer.parse(new String(data).toCharArray());
+                    //System.out.println("Input from client: " + new String(data));
+                    String result = recognizer.parse(new String(data).toCharArray());
+                    //System.out.println("Message to client: " + result);
+                    // If there's anything to send, do that now.
+                    if (result != null) {
+                        output.write(result.getBytes());
+                        output.flush();
+                    }
                 } catch (IOException ex) {
                     Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
+            
+            // A messageSize of zero is a keep-alive packet, so just ignore it.
         }
     }
 }
