@@ -41,6 +41,11 @@ public class TextToSpeechFactory {
     private static final Logger logger =
             Logger.getLogger("org.sodbeans.phonemic.TextToSpeechFactory");
 
+    /**
+     * Our speech instance.
+     */
+    private static TextToSpeech instance = null;
+    
     //set the appropriate variables if loaded.
     private static CarbonSpeak carbonSpeak = null;
     private static AppleSaySpeak appleSaySpeak = null;
@@ -163,11 +168,17 @@ public class TextToSpeechFactory {
      * @return a text to speech interface
      */
     public synchronized static TextToSpeech getDefaultTextToSpeech() {
+        // Return an existing instance if we have one.
+        if (instance != null) {
+            return instance;
+        }
+        
         TextToSpeech tts = null;
         
         // Attempt to connect to a local daemon and return.
         try {
             tts = TextToSpeechFactory.getPhonemicClient("localhost");
+            instance = tts;
             return tts;
         } catch (IOException ex) {
             // Connection failed -- fall through.
@@ -182,6 +193,7 @@ public class TextToSpeechFactory {
             
             // Attempt to connect.
             tts = TextToSpeechFactory.getPhonemicClient("localhost");
+            instance = tts;
             return tts;
         } catch (UnknownHostException ex) {
             Logger.getLogger(TextToSpeechFactory.class.getName()).log(Level.SEVERE, null, ex);
@@ -191,6 +203,7 @@ public class TextToSpeechFactory {
         
         // If we make it here, a server couldn't be connected to, nor could we
         // successfully spawn one. Return a simple speech object.
+        instance = speech;
         return speech;
     }
 

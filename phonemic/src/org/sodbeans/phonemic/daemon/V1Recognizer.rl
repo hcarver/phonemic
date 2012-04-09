@@ -79,8 +79,8 @@ public class V1Recognizer extends ProtocolRecognizer {
         requestType = textRequest | charRequest;
 
         # "Speak" commands...
-        speak = "speak:" priority ":" requestType ":" text+ %speak;
-        speakBlocking = "speakBlocking:" priority ":" requestType ":" text+ %speakBlocking;
+        speak = "speak:" priority ":" requestType ":" text* %speak;
+        speakBlocking = "speakBlocking:" priority ":" requestType ":" text* %speakBlocking;
 
         # Stop command
         stop = "stop" %stop;

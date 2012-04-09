@@ -87,10 +87,10 @@ public class ClientSpeak implements TextToSpeech {
     }
     
     /**
-     * Send a raw message. TODO: Make private
+     * Send a raw message.
      * @param msg 
      */
-    public void sendRawMessage(String msg) {
+    private synchronized void sendRawMessage(String msg) {
         int length = msg.length();
         
         if (length > 65535) {
@@ -109,11 +109,11 @@ public class ClientSpeak implements TextToSpeech {
     }
     
     /**
-     * Wait for a boolean response from the server. TODO: Make private
+     * Wait for a boolean response from the server.
      * 
      * @return 
      */
-    public boolean getBooleanResponse() {
+    public synchronized boolean getBooleanResponse() {
         try {
             String line = this.input.readLine();
             
@@ -128,11 +128,11 @@ public class ClientSpeak implements TextToSpeech {
     }
     
     /**
-     * Wait for a double response from the server. TODO: Make private
+     * Wait for a double response from the server.
      * 
      * @return 
      */
-    public double getDoubleResponse() {
+    public synchronized double getDoubleResponse() {
         try {
             String line = this.input.readLine();
             
@@ -147,11 +147,11 @@ public class ClientSpeak implements TextToSpeech {
     }
     
     /**
-     * Wait for a string response from the server. TODO: Make private
+     * Wait for a string response from the server.
      * 
      * @return 
      */
-    public String getStringResponse() {
+    public synchronized String getStringResponse() {
         try {
             String line = this.input.readLine();
             
@@ -377,7 +377,7 @@ public class ClientSpeak implements TextToSpeech {
     public boolean speak(String text, SpeechPriority priority, RequestType type) {
         sendRawMessage("speak:" + priority.toString() + ":" + type.toString() + ":" + text);
         
-        return getBooleanResponse();    
+        return true; // assume success
     }
 
     public boolean speak(char c) {
@@ -387,7 +387,7 @@ public class ClientSpeak implements TextToSpeech {
     public boolean speak(char c, SpeechPriority priority) {
         sendRawMessage("speak:" + priority.toString() + ":CHARACTER:" + c);
         
-        return getBooleanResponse();
+        return true; // assume success
     }
 
     public boolean speak(SpeechProcessor proc) {

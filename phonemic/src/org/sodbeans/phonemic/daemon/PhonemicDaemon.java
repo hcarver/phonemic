@@ -55,6 +55,7 @@ public class PhonemicDaemon extends Thread {
         this.address = address;
         this.textToSpeech = textToSpeech;
         this.setDaemon(true);
+        this.setName("Phonemic Daemon thread");
     }
     
     /**

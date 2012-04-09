@@ -13,8 +13,8 @@ action getCurrentVoice {
 
 # Speak a string.
 action speak {
-    boolean phonemicResult = textToSpeech.speak(textToSpeak.toString(), priority, requestType);
-    response = Boolean.toString(phonemicResult);
+    // speak() is a fairly common call, so we'll ignore it.
+    textToSpeech.speak(textToSpeak.toString(), priority, requestType);
 }
 
 # Speak a string (blocking)
@@ -71,7 +71,6 @@ action getVolume {
 
 action setVolume {
     double vol = Double.parseDouble(decimalString.toString());
-    System.out.println("decimalString = " + decimalString + " VOL = " + vol);
     boolean phonemicResult = textToSpeech.setVolume(vol);
     response = Boolean.toString(phonemicResult);
 }

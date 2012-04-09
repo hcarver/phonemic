@@ -28,7 +28,7 @@ public class Main {
     public static void main(String[] args) {
         Main.init();
         if(args.length == 0) {
-            speech.speakBlocking("If you're hearing this output, then Phonemic is working!");
+            speech.speakBlocking("If you are hearing this output, then Phonemic is working!");
         }
         else if (args.length == 1) {
             String text = args[0];

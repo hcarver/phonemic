@@ -37,6 +37,7 @@ public class ClientHandler extends Thread {
         this.textToSpeech = textToSpeech;
         this.client = client;
         this.setDaemon(true);
+        this.setName("Phonemic Client thread");
     }
     
     /**
@@ -113,9 +114,7 @@ public class ClientHandler extends Thread {
                 byte[] data = new byte[messageSize];
                 try {
                     input.read(data);
-                    //System.out.println("Input from client: " + new String(data));
                     String result = recognizer.parse(new String(data).toCharArray());
-                    //System.out.println("Message to client: " + result);
                     // If there's anything to send, do that now.
                     if (result != null) {
                         output.write(result.getBytes());
