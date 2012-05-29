@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.sodbeans.phonemic.tts.TextToSpeech;
@@ -27,6 +29,7 @@ public class ClientHandler extends Thread {
      */
     private TextToSpeech textToSpeech = null;
     
+    private static final int SOCKET_TIMEOUT = 10000;
     /**
      * Initialize a new client handler.
      * 
@@ -36,6 +39,11 @@ public class ClientHandler extends Thread {
     public ClientHandler(TextToSpeech textToSpeech, Socket client) {
         this.textToSpeech = textToSpeech;
         this.client = client;
+        try {
+            this.client.setSoTimeout(SOCKET_TIMEOUT);
+        } catch (SocketException ex) {
+            Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
         this.setDaemon(true);
         this.setName("Phonemic Client thread");
     }
@@ -68,6 +76,8 @@ public class ClientHandler extends Thread {
             version = input.read();
             version = version << 8;
             version |= input.read();
+        } catch (SocketTimeoutException e) {
+            // do nothing.
         } catch (IOException ex) {
             Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
             return; // failed to read first two bytes.
@@ -97,12 +107,16 @@ public class ClientHandler extends Thread {
         
         // Read input from the client, pass to recognizer.
         while (true) {
-            // Get the message size. will be between 0x0000 and 0xFFFF
+            // Get the message size. will be between 0x0000 and 0xFFFF (but not -1).
             int messageSize = 0;
             try {
                 messageSize = input.read();
+                if (messageSize == -1)
+                    return; // connection failure.
                 messageSize = messageSize << 8;
                 messageSize |= input.read();
+            } catch (SocketTimeoutException e) {
+                // do nothing.
             } catch (IOException ex) {
                 Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
                 
