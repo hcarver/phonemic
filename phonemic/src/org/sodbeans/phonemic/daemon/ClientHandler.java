@@ -42,7 +42,7 @@ public class ClientHandler extends Thread {
         try {
             this.client.setSoTimeout(SOCKET_TIMEOUT);
         } catch (SocketException ex) {
-            Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
+            // protocol error.
         }
         this.setDaemon(true);
         this.setName("Phonemic Client thread");
@@ -65,8 +65,7 @@ public class ClientHandler extends Thread {
             input = this.client.getInputStream();
             output = this.client.getOutputStream();
         } catch (IOException ex) {
-            Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
-            return; // failed to get an input or output stream.
+            return; // failed to get an input or output stream (broken pipe?)
         }
         
         // Version will be between 0x00000000 and 0xFFFFFFFF.
@@ -79,8 +78,7 @@ public class ClientHandler extends Thread {
         } catch (SocketTimeoutException e) {
             // do nothing.
         } catch (IOException ex) {
-            Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
-            return; // failed to read first two bytes.
+            return; // failed to read first two bytes (broken pipe?)
         }
         
         // Select an appropriate recognizer.
@@ -91,15 +89,14 @@ public class ClientHandler extends Thread {
                 output.write("OK\n".getBytes());
                 output.flush();
             } catch (IOException ex) {
-                Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
-                return; // failed to write to client.
+                return; // failed to write to client (broken pipe?)
             }
         } else {
             // Inappropriate version flag. Terminate connection.
             try {
                 this.client.close();
             } catch (IOException ex) {
-                Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
+                // silently ignore the client
             }
             
             return;
@@ -116,11 +113,9 @@ public class ClientHandler extends Thread {
                 messageSize = messageSize << 8;
                 messageSize |= input.read();
             } catch (SocketTimeoutException e) {
-                // do nothing.
+                // do nothing--this is merely here to prevent zombie threads.
             } catch (IOException ex) {
-                Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
-                
-                // Couldn't read from client.
+                // Couldn't read from client. Close connection silently.
                 return;
             }
             
@@ -135,7 +130,9 @@ public class ClientHandler extends Thread {
                         output.flush();
                     }
                 } catch (IOException ex) {
-                    Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
+                    // do nothing.
+                } catch (Exception ex) {
+                    // do nothing
                 }
             }
             
