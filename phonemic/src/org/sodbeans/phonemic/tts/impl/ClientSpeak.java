@@ -93,9 +93,9 @@ public class ClientSpeak implements TextToSpeech {
     private synchronized void sendRawMessage(String msg) {
         int length = msg.length();
         
-        if (length > 65535) {
-            length = 65535;
-            msg = msg.substring(0, 0xFFFFE);
+        if (length > 0xFFFF) {
+            length = 0xFFFF;
+            msg = msg.substring(0, 0xFFFE);
         }
         try {
             // Write length header (2 bytes).
