@@ -1,20 +1,11 @@
-= Phonemic version 1.2, January 19, 2012 =
+= Phonemic version 1.5, June 26, 2012 =
 
 == Introduction ==
-This is the second official release of the Phonemic speech library. This update primarily consists of minor bug fixes and added support for the PowerPC
-architecture on Mac OS X systems.
+This is the third official release of the Phonemic speech library. Starting with this release, Phonemic now has the ability to run as a daemon speech server, handling multiple client connections over a TCP protocol. 
 
-== Bug Fixes ==
-This release fixes various minor bugs found in the last Phonemic release, 1.0. The most critical bug fixed would cause Phonemic to hang when an application closed,
-causing the application to remain open until closed manually by the user.
+This new feature allows multiple programs to use the same speech settings at the same time, preventing confusion with multiple voices and cross-talk.
 
-== Added Support ==
-This release now includes support for the PowerPC architecture on Mac OS X systems. A new library file is now included in the JNI folder, called "libCarbonSpeakJNI_PPC.jnilib".
+The TCP protocol used by Phonemic in this release is documented at the following Trac page: https://sourceforge.net/apps/trac/phonemic/wiki/PhonemicProtocol
 
-== Build Notes ==
-For notes on modifying included libraries, please see the 1.0 release notes. However, should you desire to modify the PowerPC libraries included with Phonemic,
-XCode 3 (3.2.1 preferred) must be used, with the "Active Architecture" setting on "ppc." Note that the same codebase is used for both the Intel and PowerPC
-libraries.
-
-== Further Information ==
-For more information on setting up Phonemic,  please see the release notes for the 1.0 release.
+== More Information ==
+This release is primarily an enhancement release. Build notes and previous version information can be found at https://sourceforge.net/apps/trac/phonemic/wiki/ReleaseNotes
