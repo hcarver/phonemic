@@ -196,9 +196,9 @@ public class TextToSpeechFactory {
             instance = tts;
             return tts;
         } catch (UnknownHostException ex) {
-            Logger.getLogger(TextToSpeechFactory.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(TextToSpeechFactory.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(TextToSpeechFactory.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(TextToSpeechFactory.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         // If we make it here, a server couldn't be connected to, nor could we
