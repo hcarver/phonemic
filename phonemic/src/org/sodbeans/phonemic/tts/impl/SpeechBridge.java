@@ -369,6 +369,7 @@ public class SpeechBridge implements TextToSpeech{
         SpeechRequest request = new SpeechRequest();
         request.setText(text);
         request.setPriority(priority);
+        request.setType(type);
         speechQueue.offer(request);
         return true;
     }
