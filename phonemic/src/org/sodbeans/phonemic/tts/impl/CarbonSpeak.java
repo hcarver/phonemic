@@ -75,7 +75,7 @@ public class CarbonSpeak extends AbstractTextToSpeech {
             setCarbonPitch(pitch);
         }
         else if (type == RequestType.CHARACTER) {
-
+            text = text.trim();
             if (Character.isUpperCase(text.charAt(0))) {
                 setCarbonPitch(pitch + 0.5); // if pitch = 1.0, no change.
             }
