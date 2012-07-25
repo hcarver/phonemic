@@ -68,7 +68,7 @@ public class WindowsSpeak extends AbstractTextToSpeech{
      */
     private boolean speak(String text, RequestType type, boolean block) {
         String customPitchStr = this.pitchString;
-        
+        text = text.trim();
         // Was the last request a character? If so, fix the pitch.
         if (type == RequestType.CHARACTER) {
             if (Character.isUpperCase(text.charAt(0))) {
