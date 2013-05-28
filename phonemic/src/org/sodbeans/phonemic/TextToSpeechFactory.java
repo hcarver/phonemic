@@ -296,7 +296,8 @@ public class TextToSpeechFactory {
     private static boolean isWindows() {
         return (OperatingSystem.WINDOWS7 == os ||
             OperatingSystem.WINDOWS_VISTA == os ||
-            OperatingSystem.WINDOWS_XP == os);
+            OperatingSystem.WINDOWS_XP == os ||
+            OperatingSystem.OTHER_WINDOWS == os);
     }
 
     /**

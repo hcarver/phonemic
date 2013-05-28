@@ -14,6 +14,7 @@ public enum OperatingSystem {
     WINDOWS_XP,
     WINDOWS_VISTA,
     WINDOWS7,
+    OTHER_WINDOWS,
     MAC_OSX,
     LINUX;
 
@@ -50,6 +51,12 @@ public enum OperatingSystem {
         else if (os.compareTo("Linux") == 0) {
             // Turns out on Linux, it's just "Linux." -- cool
             return LINUX;
+        }
+        else if (os.toLowerCase().contains("win")){
+            // This library doesn't actually distinguish between the different
+            // versions of Windows in the way it works, so we may as well attempt
+            // to handle any other Windows version in the same way.
+            return OTHER_WINDOWS;
         }
         else {
             return null;

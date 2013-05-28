@@ -204,7 +204,8 @@ public class SpeechBridge implements TextToSpeech{
         // On Windows, we need to set the engine in the SAPI DLL.
         if (OperatingSystem.getOS() == OperatingSystem.WINDOWS7 ||
                 OperatingSystem.getOS() == OperatingSystem.WINDOWS_VISTA ||
-                OperatingSystem.getOS() == OperatingSystem.WINDOWS_XP) {
+                OperatingSystem.getOS() == OperatingSystem.WINDOWS_XP ||
+                OperatingSystem.getOS() == OperatingSystem.OTHER_WINDOWS) {
             reinitializing = false;
             result = speech.setTextToSpeechEngine(engine);
         }
