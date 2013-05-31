@@ -1,10 +1,10 @@
 #include "stdafx.h"
 #include "SpeakInterface.h"
+#include <comdef.h>
 #include <windows.h>
 #include <string>
 #include <atlstr.h>
 #include <atlcom.h>
-#include <comdef.h>
 #include <atlbase.h>
 
 using std::string;

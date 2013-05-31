@@ -1,2 +1,11 @@
 /example/phonemicTestApp/build/
+/phonemic/dist/
 /phonemic/build/
+/example/phonemicTestApp/dist/
+/example/phonemicTestApp/nbproject/private/
+*.obj
+*.pdb
+*.lib
+*.exp
+Thumbs.db
+

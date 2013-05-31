@@ -5,12 +5,11 @@ the SpeakInterface class
 
 */
 #include "stdafx.h"
+
 #include <string>
-#include"SpeakInterface.h"
-#include"sphelper.h"
 #include <atlstr.h>
-#include <string>
-#include <sapi.h>
+#include <sphelper.h>
+#include "SpeakInterface.h"
 
 using std::string;
 

@@ -38,7 +38,7 @@ std::string NVDAInterface::GetVoiceNative()
 
 const char* NVDAInterface::GetSpeechEngineNative()
 {
-	return "NVDA";
+	return NVDA_ENGINE;
 }
 
 bool NVDAInterface::isSpeaking(){return false; }

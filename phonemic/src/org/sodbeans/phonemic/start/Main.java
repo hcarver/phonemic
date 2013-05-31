@@ -5,12 +5,8 @@
 
 package org.sodbeans.phonemic.start;
 
-import java.io.IOException;
-import java.util.Iterator;
 import org.sodbeans.phonemic.*;
-import org.sodbeans.phonemic.daemon.PhonemicDaemon;
 import org.sodbeans.phonemic.tts.*;
-import org.sodbeans.phonemic.tts.impl.ClientSpeak;
 
 /**
  *

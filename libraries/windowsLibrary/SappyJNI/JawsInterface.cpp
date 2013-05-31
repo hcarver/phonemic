@@ -58,7 +58,7 @@ std::string JawsInterface::GetVoiceNative()
 
 const char* JawsInterface::GetSpeechEngineNative()
 {
-	return "JAWS";
+	return JAWS_ENGINE;
 }
 
 bool JawsInterface::LoadCOM(string API)

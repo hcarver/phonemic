@@ -1,11 +1,18 @@
 //An abstract class for screen readers
 //--1/26/10--
 
-#include "stdafx.h"
 #include <atlstr.h>
 #include <string>
+
+#include "stdafx.h"
+
 #ifndef SPEAK_INTERFACE_H
 #define SPEAK_INTERFACE_H
+
+const char* const JAWS_ENGINE("JAWS");
+const char* const NVDA_ENGINE("NVDA");
+const char* const MICROSOFT_SAPI_ENGINE("MICROSOFT_SAPI");
+const char* const NULL_ENGINE("NULL");
 
 class SpeakInterface
 {

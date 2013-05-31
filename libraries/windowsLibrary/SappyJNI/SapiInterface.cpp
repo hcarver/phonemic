@@ -125,7 +125,7 @@ bool SapiInterface::isSpeaking()
 
 const char* SapiInterface::GetSpeechEngineNative()
 {
-	return "MICROSOFT_SAPI";
+	return MICROSOFT_SAPI_ENGINE;
 }
 
 /*

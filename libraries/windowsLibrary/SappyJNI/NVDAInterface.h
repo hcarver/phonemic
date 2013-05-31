@@ -1,12 +1,13 @@
 //An abstract class for screen readers
 //--4/27/10--
 
+#include <atlstr.h>
+#include <windows.h>
+#include <string>
+
 #include "stdafx.h"
 #include "nvdaController.h"
 #include "SpeakInterface.h"
-#include <windows.h>
-#include <atlstr.h>
-#include <string>
 
 using std::string;
 

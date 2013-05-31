@@ -4,8 +4,6 @@
 
 #include "org_sapi_TextToSpeech.h"
 
-using namespace System;
-
 namespace SappyJNI {
 
 	public ref class SappyTTS
